@@ -2,10 +2,7 @@
 using Microsoft.Data.SqlClient;
 
 string connectionString =
-    @"Data Source=DESKTOP-3BNJJUV\MSSQLSERVER01;" + //Server Name
-    "Initial Catalog=Company;" + //Database
-    @"User id=DESKTOP-3BNJJUV\Hlynur;" + //Username
-    "Password="; //Password
+    @"Data Source=DESKTOP-3BNJJUV\MSSQLSERVER01;Initial Catalog=Company;User id=DESKTOP-3BNJJUV\Hlynur;Password=;Trust Server Certificate=true"; 
 
 /*
  

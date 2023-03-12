@@ -254,6 +254,29 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+CREATE FUNCTION [dbo].[GetEmpCount] (
+	@DNumber int
+)
+RETURNS int AS
+BEGIN
+	DECLARE @return_value int
+	Select @return_value = (SELECT COUNT(*) FROM Employee
+	WHERE Employee.Dno = @DNumber)
+ 
+    RETURN @return_value
+END
+GO
+
+ALTER TABLE Department ADD EmpCount AS (dbo.GetEmpCount(DNumber))
+GO
+
+USE [Company]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[CreateDepartment]
 	@DName varchar(50),
 	@MgrSSN numeric,
@@ -402,27 +425,4 @@ BEGIN
 	SELECT Department.DName, Department.DNumber, Department.MgrSSN, Department.MgrStartDate, EmpCount FROM Department
 	WHERE DNumber = @DNumber
 END
-GO
-
-USE [Company]
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE FUNCTION [dbo].[GetEmpCount] (
-	@DNumber int
-)
-RETURNS int AS
-BEGIN
-	DECLARE @return_value int
-	Select @return_value = (SELECT COUNT(*) FROM Employee
-	WHERE Employee.Dno = @DNumber)
- 
-    RETURN @return_value
-END
-GO
-
-ALTER TABLE Department ADD EmpCount AS (dbo.GetEmpCount(DNumber))
 GO

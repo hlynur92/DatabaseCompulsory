@@ -247,3 +247,177 @@ GO
 ALTER TABLE [dbo].[Works_on]  ADD  CONSTRAINT [FK_Works_on_Project] FOREIGN KEY([Pno])
 REFERENCES [dbo].[Project] ([PNumber]) ON DELETE CASCADE /*Added ON DELETE CASCADE**/
 GO
+
+USE [Company]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CreateDepartment]
+	@DName varchar(50),
+	@MgrSSN numeric,
+	@DNumber INT OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	IF EXISTS(SELECT * FROM Department where [DName]=@DName)
+		THROW 50001,'Error! A Deparment already exists with this DName',1
+	ELSE IF EXISTS(SELECT * FROM Department where [MgrSSN]=@MgrSSN)
+		THROW 50001,'Error! An existing Department is already managed by this MgrSNN',1
+	ELSE
+	INSERT INTO [dbo].[Department]
+			(DName, MgrSSN, MgrStartDate)
+     VALUES
+           (@DName
+           ,@MgrSSN
+		   ,GETDATE())
+
+	SELECT @DNumber = SCOPE_IDENTITY()
+	RETURN
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE DeleteDepartment
+	@DNumber int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DELETE Department
+	WHERE DNumber = @DNumber
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE GetAllDepartments 
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT Department.DName, Department.DNumber, Department.MgrSSN, Department.MgrStartDate, (SELECT COUNT(*) FROM Employee WHERE Employee.Dno = Department.DNumber) AS EmployeeCount FROM Department
+
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE GetDepartment 
+	@DNumber int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Department.DName, Department.DNumber, Department.MgrSSN, Department.MgrStartDate, (SELECT COUNT(*) FROM Employee WHERE Employee.Dno = Department.DNumber) AS EmployeeCount FROM Department
+	WHERE DNumber = @DNumber
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE UpdateDepartmentManager
+	-- Add the parameters for the stored procedure here
+	@DNumber int,
+	@MgrSSN numeric(9,0) 
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+    IF EXISTS(SELECT * FROM Department where [MgrSSN]=@MgrSSN)
+		THROW 50001,'Error! An existing Department is already managed by this MgrSNN',1
+	ELSE
+		UPDATE DEPARTMENT
+		SET MgrSSN = @MgrSSN,
+			MgrStartDate = CURRENT_TIMESTAMP
+		WHERE DNumber = @DNumber
+
+		UPDATE Employee
+		SET SuperSSN = @MgrSSN
+		WHERE Dno = @DNumber
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE UpdateDepartmentName
+	@DNumber int,
+	@DName varchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+    IF EXISTS(SELECT * FROM Department where [DName]=@DName)
+		THROW 50001,'Error! A Deparment already exists with this DName',1
+	ELSE
+	UPDATE Department
+	SET DName = @DName
+	WHERE DNumber = @DNumber
+END
+GO
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE GetAllDepartmentsTask3Alteration
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT Department.DName, Department.DNumber, Department.MgrSSN, Department.MgrStartDate, EmpCount FROM Department
+
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE GetDepartmentTask3Alteration
+	@DNumber int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT Department.DName, Department.DNumber, Department.MgrSSN, Department.MgrStartDate, EmpCount FROM Department
+	WHERE DNumber = @DNumber
+END
+GO
+
+USE [Company]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE FUNCTION [dbo].[GetEmpCount] (
+	@DNumber int
+)
+RETURNS int AS
+BEGIN
+	DECLARE @return_value int
+	Select @return_value = (SELECT COUNT(*) FROM Employee
+	WHERE Employee.Dno = @DNumber)
+ 
+    RETURN @return_value
+END
+GO
+
+ALTER TABLE Department ADD EmpCount AS (dbo.GetEmpCount(DNumber))
+GO

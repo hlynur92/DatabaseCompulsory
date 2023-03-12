@@ -1,1 +1,0 @@
-ALTER TABLE Department ADD EmpCount AS (dbo.GetEmpCount(DNumber))

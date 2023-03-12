@@ -374,7 +374,10 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE GetAllDepartmentsTask3Alteration
+
+/** ################### Task 3 Alteration ###################### ***/
+/** ############### ALTER GetAllDepartments ############# **/
+ALTER PROCEDURE GetAllDepartments
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -389,7 +392,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE GetDepartmentTask3Alteration
+/** ################### Task 3 Alteration ###################### ***/
+/** ############### ALTER GetDepartments ############# **/
+ALTER PROCEDURE GetDepartment 
 	@DNumber int
 AS
 BEGIN

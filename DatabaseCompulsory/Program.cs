@@ -88,7 +88,7 @@ using (SqlConnection conn = new SqlConnection(connectionString))
         Console.WriteLine("");
     }
 
-    if (false) //GET DEPARTMENT Needs fixing in SQL cuz the stored procedure doesn't work c:
+    if (true)
     {
         Console.WriteLine("############################## -- GET DEPARTMENT -- ###########################");
         SqlCommand SP_GetDepartment = new SqlCommand("GetDepartment", conn) { CommandType = CommandType.StoredProcedure };

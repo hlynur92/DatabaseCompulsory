@@ -78,10 +78,10 @@ using (SqlConnection conn = new SqlConnection(connectionString))
         using (SqlDataReader rdr = SP_GetAllDepartments.ExecuteReader())
         {
             // iterate through results, printing each to console
-            Console.WriteLine("DName \t\t DNumber \t MgrSSN \t\t MgrStartDate \t\t\t EmployeeCount");
+            Console.WriteLine("DName \t\t DNumber \t MgrSSN \t\t MgrStartDate \t\t\t EmpCount");
             while (rdr.Read())
             {
-                Console.WriteLine(rdr["DName"] + " \t " + rdr["DNumber"] + " \t\t " + rdr["MgrSSN"] + " \t\t " + rdr["MgrStartDate"] + " \t\t " + rdr["EmployeeCount"]);
+                Console.WriteLine(rdr["DName"] + " \t " + rdr["DNumber"] + " \t\t " + rdr["MgrSSN"] + " \t\t " + rdr["MgrStartDate"] + " \t\t " + rdr["EmpCount"]);
             }
         }
         Console.WriteLine("###################################################################################");
@@ -96,10 +96,10 @@ using (SqlConnection conn = new SqlConnection(connectionString))
         using (SqlDataReader rdr = SP_GetDepartment.ExecuteReader())
         {
             // iterate through results, printing each to console
-            Console.WriteLine("DName \t\t DNumber \t\t MgrSSN \t\t MgrStartDate \t\t EmployeeCount");
+            Console.WriteLine("DName \t\t DNumber \t\t MgrSSN \t\t MgrStartDate \t\t EmpCount");
             while (rdr.Read())
             {
-                Console.WriteLine(rdr["DName"] + " \t\t " + rdr["DNumber"] + " \t\t " + rdr["MgrSSN"] + " \t\t " + rdr["MgrStartDate"] + " \t\t " + rdr["EmployeeCount"]);
+                Console.WriteLine(rdr["DName"] + " \t\t " + rdr["DNumber"] + " \t\t " + rdr["MgrSSN"] + " \t\t " + rdr["MgrStartDate"] + " \t\t " + rdr["EmpCount"]);
             }
         }
         Console.WriteLine("###################################################################################");
